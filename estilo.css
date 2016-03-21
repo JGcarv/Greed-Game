@@ -1,0 +1,42 @@
+body {
+    background-color:  #00ccff;
+    background-image: linear-gradient(to bottom, transparent, rgba(0,0,0,.1));
+}
+
+.container {
+    display: inline-block;
+}
+
+td {
+    text-align: center;
+    font-family: "Teko", sans-serif;
+    font-weight: bold;
+    padding-top: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 1.5em;
+    line-height: 95%;
+    
+}
+
+#board {
+    border: 4px solid rebeccapurple;
+    padding: 15px;
+}
+
+.arrow-keys {
+    margin-left: 150px;
+    width: 155px;
+    text-align: center;
+}
+
+.selected {
+    color: black !important;
+    background-color: yellow;
+}
+
+.played {
+    color: #FFF !important;
+    background-color: #FFF;
+}
+
