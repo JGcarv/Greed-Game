@@ -3,6 +3,7 @@ var side = 15;
 var currentRow = 7;
 var currentColumn = 7;
 var direction = 0;
+var score = 0;
 
 function biuldBoardArray(side) {
     for (var x = 0; x < side; x++){
@@ -14,6 +15,22 @@ function biuldBoardArray(side) {
     }
 }
 
+function sumArray(arr){
+    var sum = 0;
+    for (var x = 0; x < arr.length; x++){
+        sum += arr[x];
+    }
+    return sum;
+}
+
+
+function maxScore(){
+    var sum = 0;
+    for (var x = 0; x < boardNumbers.length; x++){
+        sum += sumArray(boardNumbers[x]);
+    }
+    return sum;
+}
 
 function createTable(arr) {
     var table = "<table id='tb'>";
@@ -35,6 +52,17 @@ function isGameLost(){
     else{
         return false;
     }
+}
+
+function defeatChek(){
+    if(isGameLost()){
+        $('#tb').find('td').addClass('played');
+        $('#looser').html("You Lost!");
+    }
+    else {
+        setTimeout(defeatChek, 1000);
+    }
+    
 }
 
 function colorTable(){
@@ -73,8 +101,10 @@ function makeMove(jumps){
         case 1:
             while (jumps > 0) {
                
+                score += getCurrentValue();
                 boardNumbers[currentRow][currentColumn] = 0;
                 markAsPlayed();
+                
                 
                 if (currentRow == 0){
                     currentRow = side - 1;
@@ -90,8 +120,10 @@ function makeMove(jumps){
             
             while (jumps > 0){
                 
+                score += getCurrentValue();
                 boardNumbers[currentRow][currentColumn] = 0;
                 markAsPlayed();
+                
                 
                 if (currentColumn == side - 1){
                     currentColumn = 0;
@@ -107,8 +139,10 @@ function makeMove(jumps){
         case 3:
             while (jumps > 0){
                 
+                score += getCurrentValue();
                 boardNumbers[currentRow][currentColumn] = 0
                 markAsPlayed();
+                
                 
                 if (currentRow == side - 1){
                     currentRow = 0;
@@ -124,8 +158,10 @@ function makeMove(jumps){
             
             while (jumps > 0){
                 
+                score += getCurrentValue();
                 boardNumbers[currentRow][currentColumn] = 0;
                 markAsPlayed();
+                
                 
                 if (currentColumn == 0){
                     currentColumn = side - 1;
@@ -224,27 +260,51 @@ function isMoveValid(dir, jumps){
     }
 }
 
-$(document).ready(function(){
+function clearAll(){
+    side = 15;
+    boardNumbers = [];
+    currentRow = 7;
+    currentColumn = 7;
+    direction = 0;
+    score = 0;
+    $("#tb").remove();
+    $('#looser').empty();
+}
+
+function setup(){
     biuldBoardArray(side);
     var table = createTable(boardNumbers);
     $('#board').append(table);    
     colorTable();
     markCurrentElement();
+    score = getCurrentValue();
+    $('#score').html(score);
+    $("#max-score").html(maxScore());
+}
 
+function startGame(){
+    setup();
+    defeatChek();
+}
+
+$(document).ready(function(){
+
+        startGame();
     
         $('#up').click(function(){
             setDirection(1);
             if (isMoveValid(1, getCurrentValue())){
                 makeMove(getCurrentValue());
-                console.log("dir 1");
+                $('#score').html(score);
             }
+            
 
         });
     $('#right').click(function(){
             setDirection(2);
             if(isMoveValid(2, getCurrentValue())){
                 makeMove(getCurrentValue());
-                console.log("dir 2");
+                $('#score').html(score);
             }
 
         });
@@ -252,16 +312,16 @@ $(document).ready(function(){
             setDirection(3);
             if(isMoveValid(3, getCurrentValue())){
                 makeMove(getCurrentValue());
-                console.log("dir 3");
+                $('#score').html(score);
             }
-
+            
         });
     $('#left').click(function(){
             setDirection(4);
             if(isMoveValid(2, getCurrentValue())){
                 makeMove(getCurrentValue());
-                console.log("dir 4");  
-            } 
+                $('#score').html(score);  
+            }   
         }); 
   
     $(document).keydown(function(e) {
@@ -270,15 +330,15 @@ $(document).ready(function(){
                 setDirection(4);
                 if(isMoveValid(2, getCurrentValue())){
                     makeMove(getCurrentValue());
-                    console.log("dir 4");  
-                } 
+                    $('#score').html(score);  
+                }     
             break;
 
             case 38: // up
                 setDirection(1);
                 if (isMoveValid(1, getCurrentValue())){
                     makeMove(getCurrentValue());
-                    console.log("dir 1");
+                    $('#score').html(score);
                 }
             break;
 
@@ -286,7 +346,7 @@ $(document).ready(function(){
                 setDirection(2);
                 if(isMoveValid(2, getCurrentValue())){
                     makeMove(getCurrentValue());
-                    console.log("dir 2");
+                    $('#score').html(score);
                 }
             break;
 
@@ -294,13 +354,18 @@ $(document).ready(function(){
                 setDirection(3);
                 if(isMoveValid(3, getCurrentValue())){
                     makeMove(getCurrentValue());
-                    console.log("dir 3");
+                    $('#score').html(score);
                 }
             break;
 
             default: return; // exit this handler for other keys
         }
         e.preventDefault(); // prevent the default action (scroll / move caret)
+    });
+    
+    $('#reset').click(function(){
+        clearAll();
+        startGame();
     });
     
     
