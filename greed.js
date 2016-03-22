@@ -264,7 +264,44 @@ $(document).ready(function(){
             } 
         }); 
   
-    
+    $(document).keydown(function(e) {
+        switch(e.which) {
+            case 37: // left
+                setDirection(4);
+                if(isMoveValid(2, getCurrentValue())){
+                    makeMove(getCurrentValue());
+                    console.log("dir 4");  
+                } 
+            break;
+
+            case 38: // up
+                setDirection(1);
+                if (isMoveValid(1, getCurrentValue())){
+                    makeMove(getCurrentValue());
+                    console.log("dir 1");
+                }
+            break;
+
+            case 39: // right
+                setDirection(2);
+                if(isMoveValid(2, getCurrentValue())){
+                    makeMove(getCurrentValue());
+                    console.log("dir 2");
+                }
+            break;
+
+            case 40: // down
+                setDirection(3);
+                if(isMoveValid(3, getCurrentValue())){
+                    makeMove(getCurrentValue());
+                    console.log("dir 3");
+                }
+            break;
+
+            default: return; // exit this handler for other keys
+        }
+        e.preventDefault(); // prevent the default action (scroll / move caret)
+    });
     
     
 });
